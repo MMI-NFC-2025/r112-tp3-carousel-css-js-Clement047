@@ -1,69 +1,346 @@
-/* Limite la largeur maximale de l'image à 100% de son conteneur */
-/* Ajuste la hauteur de l'image automatiquement pour conserver les proportions */
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Compléter la suite du code */
-.carousel__controls {
-  /* Utilise flexbox pour aligner les éléments enfants */
-  display: flex;
-  /* Espace entre les éléments enfants 16px */
-  gap: 16px;
-  /* Aligne les éléments enfants au centre verticalement */
-  align-items: center;
-  /* Centre les éléments enfants horizontalement */
-  justify-content: center;
-  /* Marge de 16px en haut et en bas */
-  margin: 16px 0;
-}
-
-.carousel__button {
-  /* Largeur du bouton 50px */
-  width: 50px;
-  /* Hauteur du bouton 50px */
-  height: 50px;
-  /* Utilise flexbox pour aligner le contenu du bouton */
-  display: flex;
-  /* Aligne le contenu du bouton au centre verticalement */
-  align-items: center;
-  /* Centre le contenu du bouton horizontalement */
-  justify-content: center;
-  /* Bordure solide de 1px */
-  border: 1px solid #000;
-  /* Bordure arrondie pour faire un cercle */
-  border-radius: 50%;
-}
-
-.carousel__button--prev {
-  /* Fait pivoter le bouton de 180 degrés */
-  transform: rotate(180deg);
+carousel {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  /* largeur visible = 1 image */
+  margin: 0 auto;
+  overflow: hidden;
+  /* cache ce qui dépasse */
 }
 
 .carousel__container {
-  /* Utilise flexbox pour aligner les éléments enfants */
   display: flex;
-  /* Espace entre les éléments enfants 16px */
-  gap: 16px;
-  /* Ajoute un défilement horizontal si le contenu déborde */
-  overflow-x: scroll;
-  /* Marge négative à gauche pour coller le carousel au bord de l'écran -24px */
-  margin-left: -24px;
-  /* Marge négative à droite pour coller le carousel au bord de l'écran -24px */
-  margin-right: -24px;
-  /* Définit le type de défilement pour accrocher les éléments */
-  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  /* autorise le scroll horizontal */
+  scroll-behavior: smooth;
 }
 
 .carousel__item {
-  /* L'élément prend 1 part de l'espace disponible, ne rétrécit pas, base 260px */
-  flex: 1 0 260px;
-  /* Aligne l'élément au centre lors du défilement */
-  scroll-snap-align: center;
+  flex: 0 0 260px;
+  /* largeur d’un item (doit matcher le JS) */
 }
 
 .carousel__item img {
-  /* Affiche l'image comme un bloc */
+  width: 100%;
+  height: auto;
   display: block;
+}
+
+/* --- Mise en page générale --- */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Conteneur global du carrousel */
+.carousel {
+  position: relative;
+  max-width: 600px;
+  /* largeur du carrousel */
+  margin: 4rem auto;
+  /* centré avec de l'espace en haut */
+}
+
+/* Bande qui contient toutes les images */
+.carousel__container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  /* un peu d'espace pour la scrollbar */
+}
+
+/* Chaque élément (une image) */
+.carousel__item {
+  flex: 0 0 100%;
+  /* sur mobile : 1 image par écran */
+  scroll-snap-align: center;
+}
+
+/* Sur écran plus large, on réduit un peu */
+@media (min-width: 768px) {
+  .carousel__item {
+    flex: 0 0 70%;
+  }
+}
+
+/* Style des images */
+.carousel__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+/* Rendre la scrollbar plus discrète */
+.carousel__container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carousel__container::-webkit-scrollbar-track {
+  background: #eee;
+  border-radius: 999px;
+}
+
+.carousel__container::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 999px;
+}
+
+.carousel__container {
+  scrollbar-width: thin;
+}
+
+/* --- Boutons du carrousel --- */
+
+/* On veut les boutons par-dessus l'image */
+.carousel__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* bouton gauche */
+.carousel__button--prev {
+  left: 0.5rem;
+}
+
+/* bouton droite */
+.carousel__button--next {
+  right: 0.5rem;
+}
+
+/* On enlève le style moche du bouton natif */
+.carousel__button img {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- Amélioration visuelle globale --- */
+
+/* Titre centré */
+.carousel__heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Conteneur du carrousel : plus large + effet carte */
+.carousel {
+  position: relative;
+  max-width: 900px;
+  /* plus large qu'avant */
+  margin: 4rem auto;
+  padding: 2rem 2.5rem;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+}
+
+/* Bande d'images */
+.carousel__container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  gap: 1.5rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Items responsives */
+.carousel__item {
+  flex: 0 0 80%;
+  scroll-snap-align: center;
+}
+
+@media (min-width: 900px) {
+  .carousel__item {
+    flex: 0 0 55%;
+  }
+}
+
+/* Images arrondies */
+.carousel__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+/* Scrollbar très discrète */
+.carousel__container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.carousel__container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.carousel__container::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.7);
+  border-radius: 999px;
+}
+
+.carousel__container {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #9ca3af transparent;
+}
+
+.carousel__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.carousel__button--prev {
+  left: 0.75rem;
+}
+
+.carousel__button--next {
+  right: 0.75rem;
+}
+
+/* Effet au survol */
+.carousel__button:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+}
+
+/* L'icône à l'intérieur */
+.carousel__button img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Orientation des flèches */
+.carousel__button--prev img {
+  transform: rotate(180deg);
+}
+
+.carousel__button--next img {
+  transform: none;
+}
+
+/* Fond léger + recentrer le contenu */
+body {
+  margin: 0;
+  padding: 2rem 0 4rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f3f4f6;
+}
+
+/* Titre principal */
+h1 {
+  margin: 0 0 1rem;
+  padding-left: 2rem;
+  font-size: 2.4rem;
+}
+
+/* Carte blanche avec belle ombre */
+.carousel {
+  position: relative;
+  max-width: 960px;
+  margin: 3rem auto;
+  padding: 2.5rem 3rem 3rem;
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.22);
+}
+
+/* Image : effet léger au survol */
+.carousel__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+  object-fit: cover;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.carousel__item:hover img {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.35);
+}
+
+.carousel__container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.carousel__container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.carousel__container::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.7);
+  border-radius: 999px;
+}
+
+.carousel__container {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+}
+
+.carousel__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.carousel__button--prev {
+  left: 0.75rem;
+}
+
+.carousel__button--next {
+  right: 0.75rem;
+}
+
+.carousel__button:hover {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.4);
+  border-color: rgba(59, 130, 246, 0.8);
+}
+
+/* Rotation des icônes (si ce n'est pas déjà fait) */
+.carousel__button--prev img {
+  transform: rotate(180deg);
+}
+
+.carousel__button--next img {
+  transform: none;
 }
